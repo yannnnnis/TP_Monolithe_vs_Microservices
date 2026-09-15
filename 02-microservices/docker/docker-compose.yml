@@ -1,0 +1,16 @@
+services:
+  order-service:
+    build:
+      context: ../order-service
+    ports:
+      - "8001:8001"
+    environment:
+      PAYMENT_URL: http://payment-service:8002
+    depends_on:
+      - payment-service
+
+  payment-service:
+    build:
+      context: ../payment-service
+    ports:
+      - "8002:8002"

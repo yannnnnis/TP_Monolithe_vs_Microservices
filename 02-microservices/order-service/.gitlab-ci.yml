@@ -1,0 +1,26 @@
+stages:
+  - test
+  - build
+  - deploy
+
+test-order:
+  stage: test
+  image: python:3.12
+  script:
+    - pip install -r requirements.txt
+    - pytest
+
+build-order:
+  stage: build
+  image: docker:27
+  services:
+    - docker:27-dind
+  script:
+    - docker build -t shopdemo-order-service .
+
+deploy-order:
+  stage: deploy
+  script:
+    - echo "Déploiement indépendant du order-service"
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"'
